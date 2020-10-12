@@ -1,5 +1,5 @@
 #####################
-#### Mehrebenen-Regression
+#### Regression
 # von Julien P. Irmer
 
 #### Pakete laden ---
