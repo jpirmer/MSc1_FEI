@@ -1,4 +1,6 @@
-
+#######################
+### Logistic Regression
+# von Julien P. Irmer
 
 
 ### Daten laden ---
