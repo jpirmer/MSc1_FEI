@@ -8,12 +8,19 @@ load(url("https://pandar.netlify.app/post/Titanic.rda"))
 
 ### Übersicht über die Daten
 head(Titanic)
+dim(Titanic) # Dimensionen des Datensatzes
 
-### Hypothese 1: Alter als Prädiktor --- 
+
+### Bsp Münzwurf ---
+Münze <- c(0, 1, 0, 0)
+mean(Münze)
+
+### Hypothese 1: Alter als Prädiktor ---
 #### Lineares Modell: Einfache Regressionsanalyse ---
 
+library(lm.beta) # std. Koeffizienten
 reg_model <- lm(survived ~ 1 + age, data = Titanic)
-summary(reg_model)
+summary(lm.beta(reg_model))
 
 
 # Diagnostika
@@ -72,16 +79,16 @@ Titanic$p_m2 <- p_m2
 
 head(Titanic)
 
-ggplot(data = Titanic, mapping = aes(x = age, y = logit_m2, col = sex)) + 
-     geom_line(lwd = 2) + 
+ggplot(data = Titanic, mapping = aes(x = age, y = logit_m2, col = sex)) +
+     geom_line(lwd = 2) +
      ggtitle("Logit vs Age and Sex")
 
-ggplot(data = Titanic, mapping = aes(x = age, y = odds_m2, col = sex)) + 
-     geom_line(lwd = 2) + 
+ggplot(data = Titanic, mapping = aes(x = age, y = odds_m2, col = sex)) +
+     geom_line(lwd = 2) +
      ggtitle("Odds vs Age and Sex")
 
-ggplot(data = Titanic, mapping = aes(x = age, y = p_m2, col = sex)) + 
-     geom_line(lwd = 2) + 
+ggplot(data = Titanic, mapping = aes(x = age, y = p_m2, col = sex)) +
+     geom_line(lwd = 2) +
      ggtitle("P vs Age and Sex")
 
 
@@ -117,43 +124,43 @@ class_sex <- as.numeric(as.character(Titanic$sex))*100 + as.numeric(as.character
 Titanic$class_sex <- as.factor(class_sex) # als Faktor dem Datensatz hinzufügen
 head(Titanic)
 
-ggplot(data = Titanic, mapping = aes(x = age, y = logit_m3, col = class_sex)) + 
-     geom_line(lwd = 2) + 
+ggplot(data = Titanic, mapping = aes(x = age, y = logit_m3, col = class_sex)) +
+     geom_line(lwd = 2) +
      ggtitle("Logit vs Age, Sex and Class")
 
-ggplot(data = Titanic, mapping = aes(x = age, y = odds_m3, col = class_sex)) + 
-     geom_line(lwd = 2) + 
+ggplot(data = Titanic, mapping = aes(x = age, y = odds_m3, col = class_sex)) +
+     geom_line(lwd = 2) +
      ggtitle("Odds vs Age, Sex and Class")
 
-ggplot(data = Titanic, mapping = aes(x = age, y = p_m3, col = class_sex)) + 
-     geom_line(lwd = 2) + 
+ggplot(data = Titanic, mapping = aes(x = age, y = p_m3, col = class_sex)) +
+     geom_line(lwd = 2) +
      ggtitle("P vs Age, Sex and Class")
 
-     
+
 ## Appendix ---
-### Appendix A: Parametereinflüsse 
+### Appendix A: Parametereinflüsse
 Logistic_functions <- function(beta0 = 0, beta1 = 1)
 {
      par(mfrow=c(2,2)) # 4 Grafiken in einer
-     
+
      xWerte <- seq(-5, 5, 0.1)
      logit <- beta0 + beta1*xWerte
      plot(x = xWerte, y = logit, type = "l", col = "blue", lwd = 3, main = "Logit vs X", xlab = "X")
      lines(xWerte, xWerte, col = "skyblue")
      abline(h = 0, lty = 3); abline(v = 0, lty = 3)
-     
+
      odds <- exp(logit)
      plot(x = xWerte, y = odds, type = "l", col = "blue", lwd = 3, main = "Odds vs X", xlab = "X")
      abline(h = 0, lty = 3); abline(v = 0, lty = 3)
      lines(xWerte, exp(xWerte), col = "skyblue")
-     
-     
-     
+
+
+
      p <- odds/(1 + odds)
-     plot(x = xWerte, y = p, type = "l", col = "blue", lwd = 3, main = "P vs X", ylim = c(0,1), xlab = "X")  
+     plot(x = xWerte, y = p, type = "l", col = "blue", lwd = 3, main = "P vs X", ylim = c(0,1), xlab = "X")
      lines(xWerte, exp(xWerte)/(1 + exp(xWerte)), col = "skyblue")
      abline(h = 0, lty = 3); abline(v = 0, lty = 3)
-     
+
      set.seed(1234) # Vergleichbarkeit
      Y <- rbinom(n = length(xWerte), size = 1, prob = p)
      plot(x = xWerte, y = p, type = "l", col = "blue", lwd = 3, main = "P vs X und zufällige Realisierungen",
@@ -167,5 +174,4 @@ Logistic_functions(beta0 = 1, beta1 = -.5)
 
 
 
- 
-          
+
