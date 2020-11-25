@@ -241,5 +241,40 @@ sResults <- pbsapply(X = X_data, FUN = calculate_mean_SE)
 
 
 
+### Appendix D: Berechnung von $\pi$ {#AppendixD}
+plot(x = c(1,1,-1,-1,1), y = c(1,-1,-1,1,1), type = "l", 
+     ylim = c(-1.2, 1.2), xlim = c(-1.2, 1.2), ylab = "Y", 
+     xlab = "X", col = "red", lwd = 2, main = expression("Finding"~pi~"by MC-methods"))
+x <- seq(-1,1,0.01)
+lines(x = x, y = sqrt(1-x^2), lwd = 2, col = "blue") # Formel eines Kreises,
+lines(x = x, y = -sqrt(1-x^2), lwd = 2, col = "blue") # umgestellt nach x
+data <- matrix(runif(n = 2*10^2, min = -1, max = 1), nrow = 10^2)
+x <- data[,1]; y <- data[,2]
+in_circle <- x^2+y^2<=1 # ! verneint eine boolsche (TRUE oder FALSE)-Variable:
+points(x[in_circle], y[in_circle], col = "blue", pch = 16) # Punkte innerhalb des Kreises
+points(x[!in_circle], y[!in_circle], col = "red", pch = 16) # Punkte außerhalb des Kreises
+
+
+
+
+data <- matrix(runif(n = 2*10^6, min = -1, max = 1), nrow = 10^6)
+inner_circle <- function(r, dat)
+{
+        x <- dat[1]; y <- dat[2]
+        return(x^2 + y^2 <= r)
+}
+in_circle <- pbapply(X = data, MARGIN = 1, FUN = inner_circle, r = 1)
+mean(in_circle)*4 # pi
+pi # aus R
+
+
+
+# in short
+x <- data[,1]; y <- data[,2]
+in_circle <- x^2+y^2<=1
+mean(in_circle)*4 # pi
+pi # aus R
+
+
        
              
