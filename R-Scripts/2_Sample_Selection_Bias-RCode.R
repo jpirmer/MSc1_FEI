@@ -86,7 +86,12 @@ library(sampleSelection) # Paket laden
 heckman <- heckit(selection = s ~ 1 + X, outcome = Y_obs ~ 1 + X)
 summary(heckman)
 
-                         
+coef(summary(heckman))
+
+# Bsp Datensatz laden
+load(url("https://pandar.netlify.app/post/HeckData.rda"))
+
+
 ## Appendix
 ### Appendix A: Code zu `R` Grafiken {#AppendixA}
 set.seed(123456) # Vergleichbarkeit
@@ -113,33 +118,33 @@ legend(x = "bottomright", legend = c("all", "observed", "regression: all", "regr
 
 
 ### Appendix B: Heckman Modell simulieren {#AppendixB}
-simulate_heckman <- function(n, 
+simulate_heckman <- function(n,
                              beta0, beta1,
                              b0, b1, r,
                              sigma)
 {
      X <- rnorm(n = n, mean = 2, sd = 2)
      Z <- rnorm(n = n, mean = 0, sd = 1)
-     
+
      # Populationsregression
      eps <- rnorm(n = n, mean = 0, sd = sigma)
      Y <- b0 + b1*X + r*Z + eps # Populationsregression
-     
-     
+
+
      # Selektion
      s <- beta0 + beta1*X + Z > 0   # Selektionsmechanismus
-     
+
      Y_obs <-rep(NA, length(Y))
      Y_obs[s == 1] <- Y[s == 1]     # beobachtbares Y
-     
+
      df <- data.frame("X" = X, "s" = s, "Y_obs" = Y_obs)
      return(df)
 }
 
 set.seed(404) # Vergleichbarkeit
 # Daten simulieren
-data_heckman <- simulate_heckman(n = 10^5, 
-                                 beta0 = -2, beta1 = 0.5, 
+data_heckman <- simulate_heckman(n = 10^5,
+                                 beta0 = -2, beta1 = 0.5,
                                  b0 = 0.5, b1 = 1.2, r = 2, sigma = 2)
 head(data_heckman) # Daten ansehen
 
