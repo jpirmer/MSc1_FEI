@@ -110,3 +110,25 @@ semPaths(object = fit_sem_IE_TE, what = "est", layout = "tree2",
 ### Modellpassung
 library(ezCutoffs)
 ezCutoffs(model = model_sem, data = StressAtWork)
+
+
+## Appendix A ----
+### Essentielle $\tau$-Äquivalenz ----
+model_sem_IE_TE_tau <- '
+# Messmodelle
+ZD =~ l1*zd1 + l1*zd2 + l1*zd6
+BOEE =~ l2*bo1 + l2*bo6 + l2*bo12 + l2*bo19
+
+# Strukturmodell
+BOEE ~ a*ZD
+BFs ~  b*BOEE + c*ZD
+
+# Neue Parameter
+IE := a*b
+TE := IE + c
+'
+
+fit_sem_IE_TE_tau <- sem(model_sem_IE_TE_tau, StressAtWork)
+summary(fit_sem_IE_TE_tau, fit.measures = T, rsq = T)
+
+lavTestLRT(fit_sem_IE_TE_tau, fit_sem)
