@@ -113,51 +113,6 @@ anova(two_factor_ML, three_factor_ML)
 
 
 
-##### ML-EFA für den gesamten (gekürtzten) Datensatz -----
-
-# Parallelanalyse
-fa.parallel(x = dataFR,fa = "fa")
-
-## ML-EFA
-five_factor_ML <- fa(dataFR, nfactors = 5, rotate = "oblimin", fm = "ml")
-five_factor_ML$STATISTIC
-five_factor_ML$PVAL # Modell wird durch die Daten nicht verworfen
-
-# Faktorladungen
-five_factor_ML$loadings # auch nochmal ohne [,] um die Ausblendehilfe von psych als Unterstützung für die Zuordnung zu nutzen
-five_factor_ML$loadings[,] # alle Dezimalstellen anzeigen
-
-
-# Orthogonale Lösung
-fa(dataFR, nfactors = 5, rotate = "varimax", fm = "ml")$loadings[,]
-
-round(five_factor_ML$Phi, 2) # runde auf 2 Nachkommastellen
-fa(dataFR, nfactors = 5, rotate = "varimax", fm = "ml")$Phi
-diag(5) # Einheitsmatrix der Dimension 5x5 (Phi der orthognalen Lsg)
-
-
-### ML-EFA Modellvergleiche
-# Passen auch 4 Faktoren?
-four_factor_ML <- fa(dataFR, nfactors = 4, rotate = "oblimin", fm = "ml")
-four_factor_ML$STATISTIC
-four_factor_ML$PVAL
-
-anova(four_factor_ML, five_factor_ML)
-
-
-# Passen auch 6 Faktoren?
-six_factor_ML <- fa(dataFR, nfactors = 6, rotate = "oblimin", fm = "ml")
-six_factor_ML$STATISTIC
-six_factor_ML$PVAL # Modell wird durch die Daten nicht verworfen
-
-anova(five_factor_ML, six_factor_ML)
-
-anova(four_factor_ML, five_factor_ML, six_factor_ML) # alle Modellvergleiche in einem
-
-
-
-
-
 #### Appendix B -----------
 # Orthogonaler Fall
 two_factor$loadings[1, 1] # volle Formel für ersten Eintrag in Strukutrmatrix, da Kovarianz der Faktoren = 0
@@ -209,3 +164,47 @@ colMeans(dataFR)
 # Mardias Test
 library(MVN)
 mvn(data = dataFR, mvnTest = "mardia")
+
+
+#### Appendix D -----------
+# ML-EFA für den gesamten (gekürtzten) Datensatz
+
+# Parallelanalyse
+fa.parallel(x = dataFR,fa = "fa")
+
+## ML-EFA
+five_factor_ML <- fa(dataFR, nfactors = 5, rotate = "oblimin", fm = "ml")
+five_factor_ML$STATISTIC
+five_factor_ML$PVAL # Modell wird durch die Daten nicht verworfen
+
+# Faktorladungen
+five_factor_ML$loadings # auch nochmal ohne [,] um die Ausblendehilfe von psych als Unterstützung für die Zuordnung zu nutzen
+five_factor_ML$loadings[,] # alle Dezimalstellen anzeigen
+
+
+# Orthogonale Lösung
+fa(dataFR, nfactors = 5, rotate = "varimax", fm = "ml")$loadings[,]
+
+round(five_factor_ML$Phi, 2) # runde auf 2 Nachkommastellen
+fa(dataFR, nfactors = 5, rotate = "varimax", fm = "ml")$Phi
+diag(5) # Einheitsmatrix der Dimension 5x5 (Phi der orthognalen Lsg)
+
+
+### ML-EFA Modellvergleiche
+# Passen auch 4 Faktoren?
+four_factor_ML <- fa(dataFR, nfactors = 4, rotate = "oblimin", fm = "ml")
+four_factor_ML$STATISTIC
+four_factor_ML$PVAL
+
+anova(four_factor_ML, five_factor_ML)
+
+
+# Passen auch 6 Faktoren?
+six_factor_ML <- fa(dataFR, nfactors = 6, rotate = "oblimin", fm = "ml")
+six_factor_ML$STATISTIC
+six_factor_ML$PVAL # Modell wird durch die Daten nicht verworfen
+
+anova(five_factor_ML, six_factor_ML)
+
+anova(four_factor_ML, five_factor_ML, six_factor_ML) # alle Modellvergleiche in einem
+
